@@ -1,18 +1,22 @@
-var defaultAction = "restart_run_all";
+var handshakeDelayValue = 5;
+var twitchDelayValue = 2;
 
 function loadOptions() {
   chrome.storage.sync.get({
-    kernelAction: defaultAction,
+    handshakeDelay: handshakeDelayValue,
+    twitchDelay: twitchDelayValue,
   }, function(items) {
-    document.getElementById('kernel').value = items.kernelAction;
+    document.getElementById('twitchDelay').value = items.twitchDelay;
+    document.getElementById('handshakeDelay').value = items.handshakeDelay;
   });
 }
 
 function saveOptions() {
-	var select = document.getElementById("kernel");
-	var action = select.children[select.selectedIndex].value;
+	var twitchDelayValue = document.getElementById("twitchDelay").value;
+  var handshakeDelayValue = document.getElementById("handshakeDelay").value;
   chrome.storage.sync.set({
-    kernelAction: action
+    handshakeDelay: handshakeDelayValue,
+    twitchDelay: twitchDelayValue
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');

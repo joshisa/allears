@@ -38,15 +38,28 @@ proxyXHR.get('https://rawgit.com/joshisa/pleonasm/master/chrome/data/quotes.json
           var kernel = localStorage.kernel;
           var re = /https:\/\/.*\.(pandora.com)\/.*/;
           if (re.test(location.href)) { 
-            playerBar = document.getElementById("playerBar");
-            playerBar.style="height:100%";
-            playerBar.insertBefore(bq, playerBar.firstChild);
-            //"I'm Still Listening" button in Pandora web app needs to be clicked!.
-            console.warn("There's a saying among prospectors: 'Go out looking for one thing, and that's all you'll ever find.'~ Robert J. Flaherty");
-            console.warn("Initiating Pandora 'be more enjoyable' click sequence ...");
-            window.setInterval(function() {
-              document.getElementById('still_listening_ignore').click();
-            }, 2000);
+            chrome.storage.sync.get({
+                handshakeDelay: 5,
+                twitchDelay: 2
+              }, function(items) {
+                console.info("Party doesn't start for " + items.handshakeDelay*1000 + " seconds");
+                window.setTimeout(function() {
+                  playerBar = document.getElementById("playerBar");
+                  if (playerBar) {
+                    playerBar.style="height:100%";
+                    playerBar.insertBefore(bq, playerBar.firstChild);
+                  }
+                  console.info("There's a saying among prospectors: 'Go out looking for one thing, and that's all you'll ever find.'~ Robert J. Flaherty");
+                  console.info("Initiating Pandora 'be more enjoyable' click sequence ...");
+                  //"I'm Still Listening" button in Pandora web app needs to be clicked!.
+                  window.setInterval(function() {
+                    stillthere = document.getElementById('still_listening_ignore');
+                    if (stillthere) {
+                      stillthere.click();
+                    }
+                  }, items.twitchDelay*1000);
+                }, items.handshakeDelay*1000);
+            });
           }
         }
       }, 15);
